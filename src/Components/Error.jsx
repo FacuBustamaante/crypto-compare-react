@@ -1,22 +1,9 @@
-import styled from "@emotion/styled"
-
 const Error = ({ children }) => {
-
-  const Texto = styled.div`
-      background-color: #b7322c;
-      color: #fff;
-      padding: 15px;
-      font-size: 22px;
-      text-transform: uppercase;
-      font-family: 'Lato', sans-serif;
-      font-weight: 700;
-      text-align: center;
-  `
-  return (
-    <Texto>
-        {children}
-    </Texto>
-  )
+    return (
+        <div className="bg-red-500/15 border border-red-500/30 text-red-300 rounded-xl px-4 py-3 text-xs font-medium mb-4 text-center tracking-wide">
+            {children}
+        </div>
+    )
 }
 
 export default Error

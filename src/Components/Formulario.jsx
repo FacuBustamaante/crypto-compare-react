@@ -1,76 +1,53 @@
-import styled from '@emotion/styled'
 import Error from './Error'
 import useSelectMoneda from '../Hooks/useSelectMoneda'
 import { monedas } from '../data/monedas'
 import { useState, useEffect } from 'react'
 
-const InputSubmit = styled.input`
-    background-color: #9492FF;
-    border: none;
-    width: 100%;
-    padding: 10px;
-    color: #FFF;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 20px;
-    border-radius: 5px;
-    transition: background-color .3s ease;
-    margin-top: 30px;
+const Formulario = ({ setMonedas }) => {
+    const [error, setError] = useState(false)
+    const [criptos, setCriptos] = useState([])
+    const [moneda, SelectMonedas] = useSelectMoneda('Moneda', monedas)
+    const [criptomoneda, SelectCriptomoneda] = useSelectMoneda('Criptomoneda', criptos)
 
-    &:hover{
-        background-color: #7a7dfe;
-        cursor: pointer;
-    }
-`
-const Formulario = ( {state, setMonedas} ) => {
-
-    const [ error, setError ] = useState(false)
-    const [ criptos, setCriptos ] = useState([])
-    const [ moneda, SelectMonedas ] = useSelectMoneda('Elige tu moneda', monedas)
-    const [ criptomoneda, SelectCriptomoneda ] = useSelectMoneda('Elige tu criptomoneda', criptos)
-    
     useEffect(() => {
-      const consultarAPI = async () => {
-          const url = "https://min-api.cryptocompare.com/data/top/mktcapfull?limit=20&tsym=USD"
-          const respuesta = await fetch(url)
-          const resultado = await respuesta.json()
-          
-          const arrCriptos = resultado.Data.map( cripto => { 
-            const objeto = {
-                id: cripto.CoinInfo.Name,
-                nombre: cripto.CoinInfo.FullName
-            }
-            return objeto
-          })
-          setCriptos(arrCriptos)
+        const consultarAPI = async () => {
+            const url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1"
+            const respuesta = await fetch(url)
+            const resultado = await respuesta.json()
+            const arrCriptos = resultado.map(cripto => ({
+                id: cripto.id,
+                nombre: cripto.name
+            }))
+            setCriptos(arrCriptos)
         }
         consultarAPI()
     }, [])
-    
+
     const handleSubmit = e => {
         e.preventDefault()
-        
-        if([moneda, criptomoneda].includes('')){
+        if ([moneda, criptomoneda].includes('')) {
             setError(true)
             return
         }
         setError(false)
-        setMonedas({moneda, criptomoneda})
+        setMonedas({ moneda, criptomoneda })
     }
 
     return (
-    <>    
-        {error && <Error>Todos los campos son obligatorios</Error>}
-        <form
-            onSubmit={handleSubmit}
-        >
-            <SelectMonedas />
-            <SelectCriptomoneda />
-            {state}
-            <InputSubmit type="submit" value="Cotizar" />
-        </form>
-    </>
-  )
+        <>
+            {error && <Error>Todos los campos son obligatorios</Error>}
+            <form onSubmit={handleSubmit} className="space-y-4">
+                <SelectMonedas />
+                <SelectCriptomoneda />
+                <button
+                    type="submit"
+                    className="w-full py-3 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 hover:-translate-y-0.5 active:translate-y-0 mt-2"
+                >
+                    Cotizar
+                </button>
+            </form>
+        </>
+    )
 }
 
 export default Formulario

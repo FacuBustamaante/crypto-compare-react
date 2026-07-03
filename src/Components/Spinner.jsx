@@ -1,22 +1,9 @@
-import '../styles/Spinner.css'
-
 const Spinner = () => {
-  return (
-    <div className="sk-circle">
-    <div className="sk-circle1 sk-child"></div>
-    <div className="sk-circle2 sk-child"></div>
-    <div className="sk-circle3 sk-child"></div>
-    <div className="sk-circle4 sk-child"></div>
-    <div className="sk-circle5 sk-child"></div>
-    <div className="sk-circle6 sk-child"></div>
-    <div className="sk-circle7 sk-child"></div>
-    <div className="sk-circle8 sk-child"></div>
-    <div className="sk-circle9 sk-child"></div>
-    <div className="sk-circle10 sk-child"></div>
-    <div className="sk-circle11 sk-child"></div>
-    <div className="sk-circle12 sk-child"></div>
-</div>
-  )
+    return (
+        <div className="flex justify-center items-center py-8">
+            <div className="w-9 h-9 border-[3px] border-white/15 border-t-violet-500 rounded-full animate-spin" />
+        </div>
+    )
 }
 
 export default Spinner
